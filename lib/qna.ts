@@ -43,4 +43,32 @@ WING은 이 둘을 완전히 다르게 재편했습니다.
 
 정리: 이름이 겹치는 것(AUX)일수록 오히려 역할이 완전히 다르고, 이름이 다른 것(BUS)이 오히려 옛 AUX 센드 + GRP 역할을 흡수했다는 점이 WING 용어 체계의 핵심 변경점입니다.`,
   },
+  {
+    slug: "wing-term-glossary",
+    question: "WING에서 쓰는 라우팅 용어들, 역할만 추려서 정리하면?",
+    summary: "Source / Channel / Aux / Bus / Main / Matrix / User Signal / User Patch 용어집",
+    confirmed: true,
+    source: "User Manual Chapter 2, p.6-9",
+    answer: `WING 신호 흐름에 등장하는 용어를 역할 중심으로 정리했습니다.
+
+- Source: 오디오가 콘솔에 들어오는 실제 입구. XLR, StageConnect, USB, AES50 등 물리/디지털 입력 자체를 가리키며, 이름·색·아이콘·게인·팬텀파워 등을 가지고 있습니다. 여러 채널이 같은 Source를 가져다 쓸 수 있습니다.
+
+- Input Channel (40개): Source를 받아 EQ/다이내믹스 등 프로세싱을 적용하는 채널. mono/stereo/mid-side를 채널 링크 없이 자체 처리합니다.
+
+- Aux 채널 (A1-A8): 입력 채널과 같은 성격의 추가 입력 채널. 센드 버스가 아닙니다.
+
+- Bus (B1-B16): 채널 신호를 모으는 통합 버스. 채널마다 TAP(모니터용, 보통 pre-fader)/POST(이펙트 센드용)/GROUP(그룹 페이더 제어용) 중 하나의 모드로 보낼 수 있습니다.
+
+- Main (M1-M4): 최종 스테레오 출력 버스. 채널마다 4개의 독립 Main send가 있어 PA용/스트림용처럼 동시에 다른 믹스를 만들 수 있습니다.
+
+- Matrix / MTX (MX1-MX8): Bus·Main의 신호를 다시 섞는 상위 버스. 다른 Bus나 Matrix로는 못 보내고 디지털/아날로그 출력으로만 나갑니다. 로비·중계 등 서브/존 믹스용.
+
+- User Signal (24개): 입력 채널/Aux/Bus/Matrix/Main 중 하나를 복사한 모노 신호. pre-fader(TAP) 또는 post-fader로 딸 수 있고, 인접한 2개를 묶어 스테레오/mid-side로도 쓸 수 있습니다.
+
+- User Patch (32개): 외부 Source(Local In, AES50, USB Audio 등)를 복사한 모노 신호. 서로 다른 그룹/비인접 채널을 스테레오로 묶거나, 한쪽에만 게인/위상/팬텀을 다르게 걸고 싶을 때 사용합니다.
+
+- Oscillator (2개): 사인파/핑크노이즈/화이트노이즈를 내보내는 테스트톤 발생기. 어떤 채널이나 출력의 Source로 쓸 수 있습니다.
+
+핵심 구도: Source → (Input Channel 또는 Aux) → Bus → (Main 또는 Matrix) → Output. Bus/Main/Matrix는 전부 다시 채널의 Source로 재사용할 수 있어 순환 라우팅도 가능합니다.`,
+  },
 ];
