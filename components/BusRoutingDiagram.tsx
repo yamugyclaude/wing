@@ -4,10 +4,12 @@ type Box = {
   w: number;
   h: number;
   label: string;
-  sub?: string;
+  sub?: string[];
 };
 
 function BoxNode({ box, fill }: { box: Box; fill: string }) {
+  const cx = box.x + box.w / 2;
+  const labelY = box.sub ? box.y + box.h / 2 - 6 : box.y + box.h / 2 + 5;
   return (
     <g>
       <rect
@@ -20,24 +22,20 @@ function BoxNode({ box, fill }: { box: Box; fill: string }) {
         stroke="currentColor"
         strokeOpacity={0.25}
       />
-      <text
-        x={box.x + box.w / 2}
-        y={box.y + box.h / 2 + (box.sub ? -4 : 5)}
-        textAnchor="middle"
-        className="fill-current text-[13px] font-medium"
-      >
+      <text x={cx} y={labelY} textAnchor="middle" className="fill-current text-[13px] font-medium">
         {box.label}
       </text>
-      {box.sub && (
+      {box.sub?.map((line, i) => (
         <text
-          x={box.x + box.w / 2}
-          y={box.y + box.h / 2 + 13}
+          key={line}
+          x={cx}
+          y={labelY + 14 + i * 12}
           textAnchor="middle"
           className="fill-current text-[10px] opacity-60"
         >
-          {box.sub}
+          {line}
         </text>
-      )}
+      ))}
     </g>
   );
 }
@@ -81,45 +79,52 @@ function Arrow({
 
 export default function BusRoutingDiagram() {
   // Layout columns: Source -> Channel/Aux -> Bus -> Main/Matrix -> Output
-  const source: Box = { x: 10, y: 150, w: 90, h: 44, label: "Source" };
+  const source: Box = { x: 10, y: 168, w: 100, h: 48, label: "Source" };
   const channel: Box = {
-    x: 140,
+    x: 155,
     y: 90,
-    w: 100,
-    h: 44,
+    w: 140,
+    h: 52,
     label: "Input Channel",
-    sub: "40개",
+    sub: ["40개"],
   };
   const aux: Box = {
-    x: 140,
-    y: 210,
-    w: 100,
-    h: 44,
+    x: 155,
+    y: 240,
+    w: 140,
+    h: 52,
     label: "Aux 채널",
-    sub: "A1-A8",
+    sub: ["A1-A8"],
   };
   const bus: Box = {
-    x: 290,
-    y: 130,
-    w: 110,
-    h: 70,
+    x: 340,
+    y: 145,
+    w: 150,
+    h: 90,
     label: "BUS",
-    sub: "B1-B16 · TAP/POST/GROUP",
+    sub: ["B1-B16", "TAP / POST / GROUP"],
   };
-  const main: Box = { x: 450, y: 60, w: 100, h: 44, label: "MAIN", sub: "M1-M4" };
+  const main: Box = {
+    x: 535,
+    y: 55,
+    w: 130,
+    h: 52,
+    label: "MAIN",
+    sub: ["M1-M4"],
+  };
   const matrix: Box = {
-    x: 450,
-    y: 190,
-    w: 100,
-    h: 44,
+    x: 535,
+    y: 235,
+    w: 130,
+    h: 52,
     label: "MTX",
-    sub: "MX1-MX8",
+    sub: ["MX1-MX8"],
   };
-  const output: Box = { x: 600, y: 125, w: 90, h: 44, label: "Output" };
+  const output: Box = { x: 715, y: 145, w: 100, h: 48, label: "Output" };
 
   return (
     <svg
-      viewBox="0 0 720 300"
+      viewBox="0 0 850 340"
       className="w-full h-auto text-neutral-700 dark:text-neutral-300"
       role="img"
       aria-label="WING 라우팅 구조: Source가 Channel 또는 Aux로 들어가고, Bus를 거쳐 Main과 Matrix로, 최종 Output으로 나간다"
@@ -147,33 +152,33 @@ export default function BusRoutingDiagram() {
       />
       <Arrow
         from={{ x: channel.x + channel.w, y: channel.y + channel.h / 2 }}
-        to={{ x: bus.x, y: bus.y + bus.h / 2 - 10 }}
+        to={{ x: bus.x, y: bus.y + bus.h / 2 - 14 }}
       />
       <Arrow
         from={{ x: aux.x + aux.w, y: aux.y + aux.h / 2 }}
-        to={{ x: bus.x, y: bus.y + bus.h / 2 + 10 }}
+        to={{ x: bus.x, y: bus.y + bus.h / 2 + 14 }}
       />
       <Arrow
-        from={{ x: bus.x + bus.w, y: bus.y + bus.h / 2 - 10 }}
+        from={{ x: bus.x + bus.w, y: bus.y + bus.h / 2 - 14 }}
         to={{ x: main.x, y: main.y + main.h / 2 }}
       />
       <Arrow
-        from={{ x: bus.x + bus.w, y: bus.y + bus.h / 2 + 10 }}
-        to={{ x: matrix.x, y: matrix.y + matrix.h / 2 }}
+        from={{ x: bus.x + bus.w, y: bus.y + bus.h / 2 + 14 }}
+        to={{ x: matrix.x, y: matrix.y + matrix.h / 2 - 4 }}
         label="Bus→Matrix"
       />
       <Arrow
         from={{ x: main.x + main.w, y: main.y + main.h / 2 }}
-        to={{ x: matrix.x, y: matrix.y + matrix.h / 2 - 6 }}
+        to={{ x: matrix.x, y: matrix.y + matrix.h / 2 - 14 }}
         label="Main→Matrix"
       />
       <Arrow
         from={{ x: main.x + main.w, y: main.y + main.h / 2 }}
-        to={{ x: output.x, y: output.y + output.h / 2 - 10 }}
+        to={{ x: output.x, y: output.y + output.h / 2 - 12 }}
       />
       <Arrow
         from={{ x: matrix.x + matrix.w, y: matrix.y + matrix.h / 2 }}
-        to={{ x: output.x, y: output.y + output.h / 2 + 10 }}
+        to={{ x: output.x, y: output.y + output.h / 2 + 12 }}
       />
 
       <BoxNode box={source} fill="fill-neutral-100 dark:fill-neutral-900" />
