@@ -71,4 +71,30 @@ WING은 이 둘을 완전히 다르게 재편했습니다.
 
 핵심 구도: Source → (Input Channel 또는 Aux) → Bus → (Main 또는 Matrix) → Output. Bus/Main/Matrix는 전부 다시 채널의 Source로 재사용할 수 있어 순환 라우팅도 가능합니다.`,
   },
+  {
+    slug: "where-to-do-what",
+    question: "이 기능은 어느 화면/버튼에서 하는 건가요? (기능별 위치 지도)",
+    summary: "팬텀파워, 게인, 패칭, 레벨 확인 등 — 무엇을 어디서 할 수 있는지 정리",
+    confirmed: true,
+    source: "User Manual Chapter 4-5 (Control Surface, Main Screens)",
+    answer: `화면/버튼을 먼저 누르고 뭘 할 수 있는지 알아내려 하면 헷갈립니다. 반대로, "하고 싶은 것" 기준으로 어디로 가야 하는지 먼저 알아두면 화면이 눈에 들어옵니다.
+
+**중요 원칙**: 팬텀파워, 게인, 극성 같은 값은 채널이 아니라 Source에 속합니다. 그래서 채널 화면이 아니라 Source 관련 화면/버튼에서 다룹니다.
+
+- 팬텀파워 ON/OFF: 하드웨어 4-Channel Section의 GAIN/48V 버튼 누르기(홀드), 또는 ROUTING → SOURCES 화면에서 해당 Source 선택 후 설정. 채널 HOME 화면이 아님.
+- 게인(프리앰프) 조정: 4-Channel Section의 GAIN/48V 노브, 또는 ROUTING → SOURCES 화면.
+- 극성(위상) 반전, mono/stereo/mid-side 설정: ROUTING → SOURCES 화면.
+- Source를 채널에 연결(패칭): ROUTING → CHANNELS 화면. 여러 채널을 빠르게 패칭할 때 최적.
+- 채널/버스 신호를 실제 출력(스피커, 레코딩 등)으로 내보내기: ROUTING → OUTPUTS 화면.
+- 레벨을 한눈에 확인만 하기(조정 불가, 읽기 전용): METERS 화면. 여기서 그룹(예: 16 Buses)을 터치하면 실제로 조정 가능한 FADERS 화면으로 이동합니다 — METERS 자체는 보기 전용이라는 게 핵심.
+- 페이더로 레벨 직접 조정: FADERS 화면 또는 물리 페이더.
+- EQ / Gate / Compressor / Insert 조정: 채널 선택 후 HOME 화면(Channel Home) — 채널 종류(Input/Aux/Bus/Matrix/Main)에 따라 표시되는 processing slot이 다름.
+- 채널을 어떤 Bus로, 어떤 모드(TAP/POST/GROUP)로 보낼지 설정: Bus/Matrix/Main의 HOME 화면에서 채널 그리드 클릭 → Bus Feed Configuration 화면. 또는 SENDS 화면.
+- 이펙트(리버브 등) 걸기: EFFECTS 화면. Bus의 인서트에 걸면 센드 방식, 채널의 인서트에 걸면 인서트 방식.
+- DCA/Mute Group에 채널 배정: HOME 화면의 Tags 탭.
+- 스냅샷 저장/불러오기: LIBRARY 화면.
+- 네트워크, 펌웨어, 전역 설정: SETUP 화면.
+
+정리하면, 콘솔 화면은 크게 "값을 보기만 하는 화면"(METERS)과 "실제로 조정하는 화면"(FADERS, HOME, SOURCES 등)으로 나뉘고, ROUTING 안에서도 SOURCES(입력 속성)·CHANNELS(입력↔채널 연결)·OUTPUTS(신호↔출력 연결) 세 가지 역할이 명확히 구분됩니다.`,
+  },
 ];

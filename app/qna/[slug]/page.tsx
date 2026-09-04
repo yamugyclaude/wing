@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { qnaList } from "@/lib/qna";
+import { formatAnswer } from "@/lib/formatAnswer";
 import BusRoutingDiagram from "@/components/BusRoutingDiagram";
+import ScreenFunctionMap from "@/components/ScreenFunctionMap";
 
 export default async function QnaPage({
   params,
@@ -12,8 +14,12 @@ export default async function QnaPage({
   const item = qnaList.find((q) => q.slug === slug);
   if (!item) notFound();
 
+  const wide = item.slug === "where-to-do-what";
+
   return (
-    <div className="max-w-2xl mx-auto w-full px-4 py-10">
+    <div
+      className={`mx-auto w-full px-4 py-10 ${wide ? "max-w-3xl" : "max-w-2xl"}`}
+    >
       <Link href="/" className="text-sm text-neutral-500 underline underline-offset-4">
         ← 목록으로
       </Link>
@@ -41,9 +47,15 @@ export default async function QnaPage({
         </div>
       )}
 
-      <div className="mt-6 whitespace-pre-line leading-relaxed">
-        {item.answer}
-      </div>
+      {item.slug === "where-to-do-what" && (
+        <div className="mt-6 rounded-lg border border-neutral-200 dark:border-neutral-800 p-4 overflow-x-auto">
+          <div className="min-w-[640px]">
+            <ScreenFunctionMap />
+          </div>
+        </div>
+      )}
+
+      <div className="mt-6 leading-relaxed">{formatAnswer(item.answer)}</div>
     </div>
   );
 }
