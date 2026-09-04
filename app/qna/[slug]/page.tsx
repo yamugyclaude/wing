@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { qnaList } from "@/lib/qna";
+import BusRoutingDiagram from "@/components/BusRoutingDiagram";
 
 export default async function QnaPage({
   params,
@@ -33,6 +34,12 @@ export default async function QnaPage({
       </div>
 
       <h1 className="mt-2 text-2xl font-semibold">{item.question}</h1>
+
+      {item.slug === "bus-aux-mtx-main" && (
+        <div className="mt-6 rounded-lg border border-neutral-200 dark:border-neutral-800 p-4">
+          <BusRoutingDiagram />
+        </div>
+      )}
 
       <div className="mt-6 whitespace-pre-line leading-relaxed">
         {item.answer}
