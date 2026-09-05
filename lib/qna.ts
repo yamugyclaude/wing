@@ -113,4 +113,20 @@ WING은 이 둘을 완전히 다르게 재편했습니다.
 
 Bus나 Matrix도 마찬가지로 OUTPUTS 화면에서 연결해야 실제 출력으로 나갑니다 — Main만 특별한 게 아니라, 모든 버스 타입이 "처리 단계"와 "실제 출구 연결 단계"가 분리되어 있다는 게 WING 라우팅의 공통 원칙입니다.`,
   },
+  {
+    slug: "wing-editor-ipad",
+    question: "WING 에디터가 아이패드용으로 나오나요?",
+    summary: "WING Edit는 컴퓨터 전용, 아이패드는 별도의 원격 제어 앱(CoPilot/WING-Q)이 담당",
+    confirmed: true,
+    source: "웹 출처 (매뉴얼 범위 밖) — Apple App Store, Sweetwater",
+    answer: `**WING Edit(에디터) 자체는 아이패드용이 아닙니다.** Mac/Windows/Linux/Raspberry Pi 전용 소프트웨어로, Wi-Fi로 콘솔에 연결해 라우팅·채널 프로세싱·이펙트 등 전체 기능을 편집하는 툴입니다.
+
+아이패드에서는 대신 별도 앱을 씁니다:
+- WING CoPilot: 아이패드 전용, 무대 어디서든 레벨/EQ 조정 등 원격 믹싱용
+- WING-Q: 무선 원격 제어용 앱
+
+즉 "에디터급 전체 기능"은 컴퓨터(WING Edit)에서, 아이패드는 무대용 원격 컨트롤 앱으로 역할이 나뉘어 있습니다.
+
+이 항목은 공식 매뉴얼이 아니라 App Store/제조사 웹 자료를 근거로 확인한 내용입니다.`,
+  },
 ];
