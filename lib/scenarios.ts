@@ -75,9 +75,15 @@ export const scenarioList: Scenario[] = [
       {
         n: 6,
         title: "보컬 모니터용 Bus 1 설정 (TAP 모드)",
-        action: "Vocal 1, 2 채널의 Bus 1 send를 TAP 모드로 켬 — 개별 모니터 레벨 조정 가능하게",
-        where: "채널 HOME 화면의 Bus Feed Configuration, 또는 SOF FLIP 모드",
-        note: "SOF FLIP 사용법: ① 센터 페이더 섹션에서 Bus 1 선택 ② SOF FLIP 버튼 누름 ③ 각 채널 페이더로 Bus 1 센드 레벨 조정. 끝나면 SOF FLIP 다시 눌러 종료.",
+        action:
+          "① Bus 1의 HOME 화면을 열고 중앙 채널 그리드를 클릭 → Bus Feed Configuration 화면이 뜸. " +
+          "② Vocal 1, 2를 선택하고 Send Mode를 TAP/PRE로 지정 (KEEP이 아니라 명시적으로 바꿔야 적용됨). " +
+          "③ Vocal 채널이 PA에서 뮤트돼도 모니터는 계속 들리게 하려면 같은 화면의 'Ignore Channel Mute'를 Set On으로. " +
+          "④ Send Panning은 기본 Center로 두거나 필요시 CH Pan(채널 팬과 동일)으로 설정. " +
+          "⑤ 실제 모니터 레벨(볼륨 밸런스)은 SOF FLIP으로 조정: 센터 페이더 섹션에서 Bus 1 선택 → SOF FLIP 버튼 누름 → 각 보컬 채널 페이더로 Bus 1 센드 레벨 조정 → 끝나면 SOF FLIP 다시 눌러 종료.",
+        where: "Bus 1 HOME 화면 → Bus Feed Configuration, 레벨 조정은 SOF FLIP 버튼",
+        note:
+          "Send Mode(TAP/POST/GROUP 지정)와 Send Level(볼륨 크기)은 서로 다른 단계입니다 — SOF FLIP은 레벨만 조정하고, 모드 자체는 Bus Feed Configuration에서 먼저 정해야 합니다. TAP 지점은 Input 채널에서 자유롭게 옮길 수 있고(보통 pre-fader), 이 값이 모니터 믹스가 메인 페이더 움직임에 영향받지 않게 해줍니다.",
       },
       {
         n: 7,
