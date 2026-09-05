@@ -97,4 +97,20 @@ WING은 이 둘을 완전히 다르게 재편했습니다.
 
 정리하면, 콘솔 화면은 크게 "값을 보기만 하는 화면"(METERS)과 "실제로 조정하는 화면"(FADERS, HOME, SOURCES 등)으로 나뉘고, ROUTING 안에서도 SOURCES(입력 속성)·CHANNELS(입력↔채널 연결)·OUTPUTS(신호↔출력 연결) 세 가지 역할이 명확히 구분됩니다.`,
   },
+  {
+    slug: "main-vs-output",
+    question: "Main이 Output으로 나간다는 의미에서, Main이라는 용어는 정확히 무엇을 뜻하나요?",
+    summary: "Main(최종 믹스 버스)과 Output(실제 물리 출구)은 다른 레이어라는 점 정리",
+    confirmed: true,
+    source: "User Manual Chapter 2 (Main), Chapter 5.4 ROUTING → OUTPUTS",
+    answer: `**Main과 Output은 같은 것이 아닙니다.**
+
+- Main: 신호 처리 관점에서 "최종 믹스"를 만드는 버스입니다. 이름의 뜻은 "출력"이 아니라 "주(主) 믹스" — 여러 채널을 하나로 합친 대표 믹스라는 의미입니다. WING엔 M1-M4 4개가 있어서, 동시에 여러 개의 "대표 믹스"(예: PA용, 라이브 스트림용)를 만들 수 있습니다.
+
+- Output: 그 믹스가 실제로 빠져나가는 물리적/디지털 출구(XLR, AES50 등)입니다. ROUTING → OUTPUTS 화면에서 "무엇을(Source Group) 어디로(출력 커넥터) 보낼지" 별도로 연결해야 실제 소리가 나갑니다.
+
+즉 Main은 "출력으로 나갈 준비가 된 최종 신호"이고, Output은 "그 신호가 실제로 빠져나가는 문"입니다. Main을 만들었어도 OUTPUTS에서 연결해주지 않으면 소리는 안 나갑니다 — "Main"이라는 이름 자체에 "밖으로 나간다"는 뜻이 들어있는 게 아니라, 관례적으로 Main이 대부분 바로 Output에 연결되는 경우가 많아서 그렇게 느껴지는 것뿐입니다.
+
+Bus나 Matrix도 마찬가지로 OUTPUTS 화면에서 연결해야 실제 출력으로 나갑니다 — Main만 특별한 게 아니라, 모든 버스 타입이 "처리 단계"와 "실제 출구 연결 단계"가 분리되어 있다는 게 WING 라우팅의 공통 원칙입니다.`,
+  },
 ];
