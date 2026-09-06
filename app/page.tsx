@@ -22,6 +22,9 @@ export default function Home() {
           <Link href="/template" className="text-sm underline underline-offset-4">
             입력 장비 템플릿 (새 시나리오 준비용) →
           </Link>
+          <Link href="/designer" className="text-sm underline underline-offset-4">
+            채널/버스 자동 설계기 →
+          </Link>
         </div>
       </header>
 
