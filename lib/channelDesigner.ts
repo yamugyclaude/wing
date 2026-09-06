@@ -1,17 +1,16 @@
-export type DesignerInput = {
-  vocal: number;
-  guitar: number;
-  bass: number;
-  keys: number;
-  drum: number;
-  otherDi: number;
-  monitorMixes: number;
-  fxBuses: number;
-  addStreamMain: boolean;
+export type CategoryRow = {
+  id: string;
+  label: string;
+  count: number;
+};
+
+export type BusRow = {
+  id: string;
+  label: string;
 };
 
 export type ChannelAssignment = {
-  category: string;
+  label: string;
   from: number;
   to: number;
 };
@@ -19,54 +18,34 @@ export type ChannelAssignment = {
 export type DesignerResult = {
   channels: ChannelAssignment[];
   totalChannels: number;
-  monitorBuses: number[];
-  fxBusesList: number[];
+  buses: { label: string; number: number }[];
   mains: string[];
   warnings: string[];
 };
 
-// Fixed assignment order — vocals first, then instruments in this order, drums as one block, other DI last.
-const CATEGORY_ORDER: { key: keyof DesignerInput; label: string }[] = [
-  { key: "vocal", label: "보컬" },
-  { key: "guitar", label: "기타" },
-  { key: "bass", label: "베이스" },
-  { key: "keys", label: "신디/키보드" },
-  { key: "drum", label: "드럼" },
-  { key: "otherDi", label: "기타 DI" },
-];
-
 const MAX_INPUT_CHANNELS = 40; // WING: 40 input channels
 const MAX_BUSES = 16; // WING: 16 buses
 
-export function designChannels(input: DesignerInput): DesignerResult {
+export function designChannels(
+  categories: CategoryRow[],
+  buses: BusRow[],
+  mainLabels: string[]
+): DesignerResult {
   const channels: ChannelAssignment[] = [];
   let cursor = 1;
 
-  for (const { key, label } of CATEGORY_ORDER) {
-    const count = input[key] as number;
-    if (count > 0) {
-      channels.push({ category: label, from: cursor, to: cursor + count - 1 });
-      cursor += count;
+  for (const cat of categories) {
+    if (cat.count > 0) {
+      channels.push({ label: cat.label || "(이름 없음)", from: cursor, to: cursor + cat.count - 1 });
+      cursor += cat.count;
     }
   }
 
   const totalChannels = cursor - 1;
 
-  const monitorBuses: number[] = [];
-  let busCursor = 1;
-  for (let i = 0; i < input.monitorMixes; i++) {
-    monitorBuses.push(busCursor);
-    busCursor++;
-  }
+  const busResult = buses.map((b, i) => ({ label: b.label || "(이름 없음)", number: i + 1 }));
 
-  const fxBusesList: number[] = [];
-  for (let i = 0; i < input.fxBuses; i++) {
-    fxBusesList.push(busCursor);
-    busCursor++;
-  }
-
-  const mains = ["Main 1 (PA)"];
-  if (input.addStreamMain) mains.push("Main 2 (스트리밍/녹음용)");
+  const mains = mainLabels.length > 0 ? mainLabels : ["Main 1"];
 
   const warnings: string[] = [];
   if (totalChannels > MAX_INPUT_CHANNELS) {
@@ -74,11 +53,12 @@ export function designChannels(input: DesignerInput): DesignerResult {
       `총 입력 채널이 ${totalChannels}개로 WING의 Input Channel 40개를 초과합니다. Aux 채널(A1-A8) 활용을 검토하세요.`
     );
   }
-  if (busCursor - 1 > MAX_BUSES) {
-    warnings.push(
-      `모니터+FX 버스 합계가 ${busCursor - 1}개로 WING의 Bus 16개를 초과합니다.`
-    );
+  if (busResult.length > MAX_BUSES) {
+    warnings.push(`버스가 ${busResult.length}개로 WING의 Bus 16개를 초과합니다.`);
+  }
+  if (mains.length > 4) {
+    warnings.push(`Main이 ${mains.length}개로 WING의 Main 4개를 초과합니다.`);
   }
 
-  return { channels, totalChannels, monitorBuses, fxBusesList, mains, warnings };
+  return { channels, totalChannels, buses: busResult, mains, warnings };
 }
