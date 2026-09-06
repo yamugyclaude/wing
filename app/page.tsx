@@ -19,6 +19,9 @@ export default function Home() {
           <Link href="/scenario" className="text-sm underline underline-offset-4">
             실전 시나리오 (물리 버튼 포함 라우팅 절차) →
           </Link>
+          <Link href="/template" className="text-sm underline underline-offset-4">
+            입력 장비 템플릿 (새 시나리오 준비용) →
+          </Link>
         </div>
       </header>
 
