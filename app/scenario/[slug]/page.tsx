@@ -75,14 +75,37 @@ export default async function ScenarioPage({
                 </span>
                 <h3 className="font-medium">{step.title}</h3>
               </div>
-              <p className="mt-2 text-sm leading-relaxed">{step.action}</p>
+              <p className="mt-2 text-sm leading-relaxed">▶ {step.command}</p>
               <p className="mt-1 text-xs text-neutral-500">📍 {step.where}</p>
               {step.note && (
                 <p className="mt-1 text-xs text-neutral-500 italic">{step.note}</p>
               )}
+              {step.troubleshooting && step.troubleshooting.length > 0 && (
+                <div className="mt-2 rounded-md bg-red-50 dark:bg-red-950 p-2">
+                  <p className="text-xs font-semibold text-red-800 dark:text-red-200">
+                    실제로 해보니 안 됐던 부분
+                  </p>
+                  <ul className="mt-1 list-disc list-inside text-xs text-red-800 dark:text-red-200 space-y-0.5">
+                    {step.troubleshooting.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-3">
+          최종 결과
+        </h2>
+        <ul className="rounded-lg border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950 p-4 list-disc list-inside text-sm space-y-1">
+          {scenario.finalResult.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
       </section>
     </div>
   );
