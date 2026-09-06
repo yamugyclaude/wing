@@ -2,37 +2,43 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { designChannels, type DesignerInput } from "@/lib/channelDesigner";
+import {
+  designChannels,
+  type BusRow,
+  type CategoryRow,
+} from "@/lib/channelDesigner";
 
-const DEFAULT_INPUT: DesignerInput = {
-  vocal: 0,
-  guitar: 0,
-  bass: 0,
-  keys: 0,
-  drum: 0,
-  otherDi: 0,
-  monitorMixes: 1,
-  fxBuses: 1,
-  addStreamMain: false,
-};
+let idCounter = 0;
+function nextId() {
+  idCounter += 1;
+  return `row-${idCounter}`;
+}
 
-const NUMBER_FIELDS: { key: keyof DesignerInput; label: string }[] = [
-  { key: "vocal", label: "보컬 채널 수" },
-  { key: "guitar", label: "기타 채널 수" },
-  { key: "bass", label: "베이스 채널 수" },
-  { key: "keys", label: "신디/키보드 채널 수" },
-  { key: "drum", label: "드럼 채널 수" },
-  { key: "otherDi", label: "기타 DI 채널 수" },
+const DEFAULT_CATEGORIES: CategoryRow[] = [
+  { id: nextId(), label: "보컬", count: 0 },
+  { id: nextId(), label: "기타", count: 0 },
+  { id: nextId(), label: "베이스", count: 0 },
+  { id: nextId(), label: "드럼", count: 0 },
 ];
 
-export default function DesignerPage() {
-  const [input, setInput] = useState<DesignerInput>(DEFAULT_INPUT);
-  const result = useMemo(() => designChannels(input), [input]);
+const DEFAULT_BUSES: BusRow[] = [
+  { id: nextId(), label: "모니터" },
+];
 
-  const setNumber = (key: keyof DesignerInput, value: string) => {
-    const n = Math.max(0, parseInt(value, 10) || 0);
-    setInput((prev) => ({ ...prev, [key]: n }));
-  };
+function moveItem<T>(arr: T[], index: number, dir: -1 | 1): T[] {
+  const target = index + dir;
+  if (target < 0 || target >= arr.length) return arr;
+  const copy = [...arr];
+  [copy[index], copy[target]] = [copy[target], copy[index]];
+  return copy;
+}
+
+export default function DesignerPage() {
+  const [categories, setCategories] = useState<CategoryRow[]>(DEFAULT_CATEGORIES);
+  const [buses, setBuses] = useState<BusRow[]>(DEFAULT_BUSES);
+  const [mains, setMains] = useState<string[]>(["Main 1 (PA)"]);
+
+  const result = useMemo(() => designChannels(categories, buses, mains), [categories, buses, mains]);
 
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-10">
@@ -43,60 +49,182 @@ export default function DesignerPage() {
       <header className="mt-4 mb-6">
         <h1 className="text-2xl font-semibold">채널/버스 자동 설계기</h1>
         <p className="mt-1 text-sm text-neutral-500">
-          장비 개수를 입력하면 정해진 규칙에 따라 채널 번호와 버스 배정이 바로 계산됩니다.
+          항목 이름·순서·개수를 자유롭게 정하면, 그 순서 그대로 채널/버스 번호가 계산됩니다.
         </p>
       </header>
 
-      <section className="grid grid-cols-2 gap-4">
-        {NUMBER_FIELDS.map((f) => (
-          <label key={f.key} className="flex flex-col gap-1 text-sm">
-            {f.label}
-            <input
-              type="number"
-              min={0}
-              value={input[f.key] as number}
-              onChange={(e) => setNumber(f.key, e.target.value)}
-              className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5"
-            />
-          </label>
-        ))}
-        <label className="flex flex-col gap-1 text-sm">
-          모니터 믹스 개수 (Bus)
-          <input
-            type="number"
-            min={0}
-            value={input.monitorMixes}
-            onChange={(e) => setNumber("monitorMixes", e.target.value)}
-            className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          이펙트(FX) 버스 개수
-          <input
-            type="number"
-            min={0}
-            value={input.fxBuses}
-            onChange={(e) => setNumber("fxBuses", e.target.value)}
-            className="rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5"
-          />
-        </label>
+      {/* Channel categories */}
+      <section>
+        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-2">
+          채널 항목 (위에서부터 순서대로 번호가 매겨집니다)
+        </h2>
+        <div className="flex flex-col gap-2">
+          {categories.map((cat, i) => (
+            <div key={cat.id} className="flex items-center gap-2">
+              <div className="flex flex-col">
+                <button
+                  type="button"
+                  aria-label="위로 이동"
+                  disabled={i === 0}
+                  onClick={() => setCategories((prev) => moveItem(prev, i, -1))}
+                  className="text-xs disabled:opacity-30"
+                >
+                  ▲
+                </button>
+                <button
+                  type="button"
+                  aria-label="아래로 이동"
+                  disabled={i === categories.length - 1}
+                  onClick={() => setCategories((prev) => moveItem(prev, i, 1))}
+                  className="text-xs disabled:opacity-30"
+                >
+                  ▼
+                </button>
+              </div>
+              <input
+                type="text"
+                value={cat.label}
+                onChange={(e) =>
+                  setCategories((prev) =>
+                    prev.map((c) => (c.id === cat.id ? { ...c, label: e.target.value } : c))
+                  )
+                }
+                placeholder="항목 이름 (예: 보컬)"
+                className="flex-1 rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5 text-sm"
+              />
+              <input
+                type="number"
+                min={0}
+                value={cat.count}
+                onChange={(e) =>
+                  setCategories((prev) =>
+                    prev.map((c) =>
+                      c.id === cat.id ? { ...c, count: Math.max(0, parseInt(e.target.value, 10) || 0) } : c
+                    )
+                  )
+                }
+                className="w-20 rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5 text-sm"
+              />
+              <button
+                type="button"
+                aria-label="삭제"
+                onClick={() => setCategories((prev) => prev.filter((c) => c.id !== cat.id))}
+                className="text-xs text-red-600 dark:text-red-400"
+              >
+                삭제
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => setCategories((prev) => [...prev, { id: nextId(), label: "", count: 0 }])}
+          className="mt-2 text-xs rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+        >
+          + 채널 항목 추가
+        </button>
       </section>
 
-      <label className="mt-4 flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={input.addStreamMain}
-          onChange={(e) => setInput((prev) => ({ ...prev, addStreamMain: e.target.checked }))}
-        />
-        스트리밍/녹음용 Main 2 추가
-      </label>
-
+      {/* Buses */}
       <section className="mt-8">
+        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-2">
+          버스 항목 (위에서부터 Bus 1, 2, 3...)
+        </h2>
+        <div className="flex flex-col gap-2">
+          {buses.map((bus, i) => (
+            <div key={bus.id} className="flex items-center gap-2">
+              <div className="flex flex-col">
+                <button
+                  type="button"
+                  aria-label="위로 이동"
+                  disabled={i === 0}
+                  onClick={() => setBuses((prev) => moveItem(prev, i, -1))}
+                  className="text-xs disabled:opacity-30"
+                >
+                  ▲
+                </button>
+                <button
+                  type="button"
+                  aria-label="아래로 이동"
+                  disabled={i === buses.length - 1}
+                  onClick={() => setBuses((prev) => moveItem(prev, i, 1))}
+                  className="text-xs disabled:opacity-30"
+                >
+                  ▼
+                </button>
+              </div>
+              <input
+                type="text"
+                value={bus.label}
+                onChange={(e) =>
+                  setBuses((prev) => prev.map((b) => (b.id === bus.id ? { ...b, label: e.target.value } : b)))
+                }
+                placeholder="버스 이름 (예: 모니터, 리버브)"
+                className="flex-1 rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5 text-sm"
+              />
+              <button
+                type="button"
+                aria-label="삭제"
+                onClick={() => setBuses((prev) => prev.filter((b) => b.id !== bus.id))}
+                className="text-xs text-red-600 dark:text-red-400"
+              >
+                삭제
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => setBuses((prev) => [...prev, { id: nextId(), label: "" }])}
+          className="mt-2 text-xs rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+        >
+          + 버스 항목 추가
+        </button>
+      </section>
+
+      {/* Mains */}
+      <section className="mt-8">
+        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-2">
+          Main 항목
+        </h2>
+        <div className="flex flex-col gap-2">
+          {mains.map((m, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <input
+                type="text"
+                value={m}
+                onChange={(e) =>
+                  setMains((prev) => prev.map((v, idx) => (idx === i ? e.target.value : v)))
+                }
+                className="flex-1 rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1.5 text-sm"
+              />
+              <button
+                type="button"
+                aria-label="삭제"
+                onClick={() => setMains((prev) => prev.filter((_, idx) => idx !== i))}
+                className="text-xs text-red-600 dark:text-red-400"
+              >
+                삭제
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => setMains((prev) => [...prev, `Main ${prev.length + 1}`])}
+          className="mt-2 text-xs rounded-md border border-neutral-300 dark:border-neutral-700 px-2 py-1 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+        >
+          + Main 추가
+        </button>
+      </section>
+
+      {/* Results */}
+      <section className="mt-10">
         <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-3">
           결과: 채널 배정
         </h2>
         {result.channels.length === 0 ? (
-          <p className="text-sm text-neutral-500">위에 채널 수를 입력하세요.</p>
+          <p className="text-sm text-neutral-500">위에 채널 항목과 개수를 입력하세요.</p>
         ) : (
           <table className="w-full text-sm border-collapse">
             <thead>
@@ -106,12 +234,10 @@ export default function DesignerPage() {
               </tr>
             </thead>
             <tbody>
-              {result.channels.map((c) => (
-                <tr key={c.category} className="border-b border-neutral-100 dark:border-neutral-900">
-                  <td className="py-2 pr-3 font-medium">{c.category}</td>
-                  <td className="py-2">
-                    {c.from === c.to ? `CH${c.from}` : `CH${c.from}-${c.to}`}
-                  </td>
+              {result.channels.map((c, i) => (
+                <tr key={i} className="border-b border-neutral-100 dark:border-neutral-900">
+                  <td className="py-2 pr-3 font-medium">{c.label}</td>
+                  <td className="py-2">{c.from === c.to ? `CH${c.from}` : `CH${c.from}-${c.to}`}</td>
                 </tr>
               ))}
             </tbody>
@@ -125,15 +251,14 @@ export default function DesignerPage() {
           결과: 버스 / Main
         </h2>
         <ul className="text-sm space-y-1">
-          {result.monitorBuses.length > 0 && (
-            <li>
-              모니터 버스: {result.monitorBuses.map((b) => `Bus ${b}`).join(", ")}
+          {result.buses.map((b) => (
+            <li key={b.number}>
+              Bus {b.number}: {b.label}
             </li>
-          )}
-          {result.fxBusesList.length > 0 && (
-            <li>FX 버스: {result.fxBusesList.map((b) => `Bus ${b}`).join(", ")}</li>
-          )}
-          <li>Main: {result.mains.join(", ")}</li>
+          ))}
+          {result.mains.map((m, i) => (
+            <li key={i}>{m}</li>
+          ))}
         </ul>
       </section>
 
@@ -146,17 +271,6 @@ export default function DesignerPage() {
           ))}
         </div>
       )}
-
-      <section className="mt-8 text-xs text-neutral-500">
-        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-2">
-          배정 규칙
-        </h2>
-        <ol className="list-decimal list-inside space-y-0.5">
-          <li>채널 순서: 보컬 → 기타 → 베이스 → 신디/키보드 → 드럼 → 기타 DI</li>
-          <li>모니터 버스는 Bus 1부터, FX 버스는 그다음 번호부터 순서대로 배정</li>
-          <li>Main 1은 항상 PA용으로 고정, 필요시 Main 2를 스트리밍/녹음용으로 추가</li>
-        </ol>
-      </section>
     </div>
   );
 }
