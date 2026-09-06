@@ -146,4 +146,41 @@ export const scenarioList: Scenario[] = [
       "전체 상태가 스냅샷으로 저장되어 있어 다음에 바로 불러올 수 있다",
     ],
   },
+  {
+    slug: "real-show-db-system",
+    title: "실제 공연 세팅 — d&b 시스템 + 22채널 밴드",
+    summary: "실제 보유 장비(d&b V8/V-SUB/M4, Powersoft X8, D12, FC-2500) 기준으로 짜는 22채널 밴드 공연 세팅. 채널/버스 번호 설계는 진행 중.",
+    confirmed: false,
+    source: "사장님 제공 실제 장비 인벤토리 (2026-09 대화 기준)",
+    setup: [
+      "Vocal 1-8: Sennheiser skm-s 865 핸드헬드 (EW-D 무선 리시브)",
+      "Guitar 1: Shure Sm57",
+      "Guitar 2: Shure Sm57",
+      "Snare: Shure Sm57",
+      "Kick, Hi-hat, Tom1, Tom2, Tom3, OH-L, OH-R: Sennheiser e600 드럼셋 (7채널)",
+      "Synth: DI(BSS AR133) 2채널",
+      "Acoustic Guitar: DI(BSS AR133) 1채널",
+      "Bass: DI(BSS AR133) 1채널",
+    ],
+    goal: [
+      "전체 22채널을 WING으로 받아 d&b 시스템(V8 메인 + V-SUB 서브)으로 PA 출력",
+      "M4 모니터 웨지 6개로 필요한 만큼 모니터 믹스 구성",
+      "실제 앰프 결선: Powersoft X8 → V8+V-SUB(메인/서브), D12+FC-2500 → M4(모니터)",
+    ],
+    targetSettings: [],
+    steps: [
+      {
+        n: 1,
+        title: "입력 리스트 확정",
+        command:
+          "보컬 8채널(skm-s 865), 기타 2채널(Sm57), 드럼 8채널(Sm57 스네어 + e600 7채널), DI 4채널(신디2/어쿠스틱1/베이스1) — 총 22채널로 확정했다.",
+        where: "대화로 정리 (아직 콘솔 조작 아님)",
+        note: "스피커/앰프 결선도 함께 확정: Powersoft X8이 V8(8개)+V-SUB(4개) 담당, D12 1대+FC-2500 1대가 M4(6개) 모니터 담당.",
+      },
+    ],
+    finalResult: [
+      "22채널 입력 리스트와 실제 스피커/앰프 결선 구조까지는 확정됨",
+      "다음 단계: WING 채널 번호(1-22) 배정, 모니터용 Bus 구성, Main/Matrix를 실제 d&b 시스템 출력에 연결하는 절차 설계 — 진행 중",
+    ],
+  },
 ];
