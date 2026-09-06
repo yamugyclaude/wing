@@ -7,6 +7,12 @@ export type ScenarioStep = {
   troubleshooting?: string[]; // problems found while actually following the steps, and the fix
 };
 
+export type TargetSetting = {
+  item: string; // channel/bus/main name
+  param: string; // what's being set
+  target: string; // concrete numeric/state target
+};
+
 export type Scenario = {
   slug: string;
   title: string;
@@ -15,6 +21,7 @@ export type Scenario = {
   source?: string;
   setup: string[]; // channel list description
   goal: string[];
+  targetSettings: TargetSetting[]; // concrete numeric targets — practice guidance, not from manual
   steps: ScenarioStep[];
   finalResult: string[];
 };
@@ -39,6 +46,21 @@ export const scenarioList: Scenario[] = [
       "모든 채널을 Main 1(PA)으로 출력",
       "Bus 1을 보컬 전용 모니터 믹스로 써서 Aux Out(웨지)로 내보내기",
       "Bus 2를 보컬 리버브 센드로 써서 Main 1에 섞기",
+    ],
+    targetSettings: [
+      { item: "Vocal 1, 2", param: "게인", target: "약 30-40dB (다이나믹 마이크 기준, 평균 토크 레벨에서 -18dB 근처)" },
+      { item: "Vocal 1, 2", param: "팬텀파워", target: "ON (콘덴서 마이크인 경우만)" },
+      { item: "Vocal 1, 2", param: "저역 필터(하이패스)", target: "약 100Hz 이상 컷 — 팝노이즈/근접효과 제거용" },
+      { item: "Guitar/Bass DI", param: "게인", target: "약 0-10dB (라인 레벨, 이미 신호가 큰 편)" },
+      { item: "Kick", param: "게인 + 게이트", target: "약 20-30dB, 게이트 threshold는 다른 드럼 소리에 안 열릴 정도로" },
+      { item: "Snare", param: "게인 + 게이트", target: "약 25-35dB, 게이트로 킥/하이햇 블리드 억제" },
+      { item: "Overhead L/R", param: "게인 + 팬텀", target: "약 25-35dB, 팬텀 ON, 팬은 L/R 풀로 벌려서 스테레오감" },
+      { item: "Main 1", param: "마스터 페이더", target: "0dB(유니티) 부근에서 시작 — 여기서 더 올리기보다 채널 게인으로 헤드룸 확보" },
+      { item: "Bus 1 (모니터)", param: "Send Mode", target: "TAP/PRE — 메인 페이더를 움직여도 모니터 밸런스가 안 변하게" },
+      { item: "Bus 1 (모니터)", param: "Vocal 1, 2 센드 레벨", target: "본인 목소리는 크게, 상대 보컬은 살짝 — 서로 다르게 시작해서 리허설 중 조정" },
+      { item: "Bus 2 (리버브)", param: "Send Mode", target: "POST — 페이더 움직임에 비례해서 리버브 양도 같이 변하게" },
+      { item: "Bus 2 (리버브)", param: "리버브 Decay/Mix", target: "Decay 1.2-1.8초, Mix는 보컬이 약간 촉촉해지는 정도(과하지 않게)" },
+      { item: "Bus 2 → Main 1", param: "센드 레벨", target: "드라이 신호보다 15-20dB 낮게 — 리버브가 티나지 않게 자연스럽게" },
     ],
     steps: [
       {

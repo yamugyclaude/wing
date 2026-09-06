@@ -53,6 +53,43 @@ export default async function ScenarioPage({
         </ul>
       </section>
 
+      <section className="mt-6">
+        <div className="flex items-baseline gap-2">
+          <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide">
+            목표 설정값 (구체적 타겟)
+          </h2>
+          <span className="text-xs rounded-full px-2 py-0.5 bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+            실전 관행값 — 매뉴얼 수치 아님
+          </span>
+        </div>
+        <p className="mt-1 text-xs text-neutral-500">
+          아래 수치는 이 시나리오가 "완성됐다"고 볼 수 있는 시작점 기준입니다. 실제 마이크·공연장·연주자에 따라 조정하세요.
+        </p>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full text-sm border-collapse min-w-[500px]">
+            <thead>
+              <tr className="text-left text-xs text-neutral-500 border-b border-neutral-200 dark:border-neutral-800">
+                <th className="py-2 pr-3">채널/버스</th>
+                <th className="py-2 pr-3">항목</th>
+                <th className="py-2">타겟</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scenario.targetSettings.map((t, i) => (
+                <tr
+                  key={`${t.item}-${t.param}-${i}`}
+                  className="border-b border-neutral-100 dark:border-neutral-900"
+                >
+                  <td className="py-2 pr-3 font-medium whitespace-nowrap">{t.item}</td>
+                  <td className="py-2 pr-3 whitespace-nowrap text-neutral-500">{t.param}</td>
+                  <td className="py-2">{t.target}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <div className="mt-6 rounded-lg border border-neutral-200 dark:border-neutral-800 p-4 overflow-x-auto">
         <div className="min-w-[600px]">
           <ScenarioFlowDiagram />
