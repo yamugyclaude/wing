@@ -16,10 +16,11 @@ function nextId() {
 }
 
 const DEFAULT_CATEGORIES: CategoryRow[] = [
-  { id: nextId(), label: "보컬", count: 0 },
-  { id: nextId(), label: "기타", count: 0 },
-  { id: nextId(), label: "베이스", count: 0 },
-  { id: nextId(), label: "드럼", count: 0 },
+  { id: nextId(), label: "VOX", count: 0 },
+  { id: nextId(), label: "Ac GTR", count: 0 },
+  { id: nextId(), label: "GTR", count: 0 },
+  { id: nextId(), label: "BASS", count: 0 },
+  { id: nextId(), label: "DRUM", count: 0 },
 ];
 
 const DEFAULT_BUSES: BusRow[] = [
