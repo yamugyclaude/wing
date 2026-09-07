@@ -15,8 +15,14 @@ export type ChannelAssignment = {
   to: number;
 };
 
+export type FlatChannel = {
+  number: number;
+  label: string;
+};
+
 export type DesignerResult = {
   channels: ChannelAssignment[];
+  flatChannels: FlatChannel[];
   totalChannels: number;
   buses: { label: string; number: number }[];
   mains: string[];
@@ -43,6 +49,14 @@ export function designChannels(
 
   const totalChannels = cursor - 1;
 
+  const flatChannels: FlatChannel[] = [];
+  for (const c of channels) {
+    for (let n = c.from; n <= c.to; n++) {
+      const suffix = c.to > c.from ? ` ${n - c.from + 1}` : "";
+      flatChannels.push({ number: n, label: `${c.label}${suffix}` });
+    }
+  }
+
   const busResult = buses.map((b, i) => ({ label: b.label || "(이름 없음)", number: i + 1 }));
 
   const mains = mainLabels.length > 0 ? mainLabels : ["Main 1"];
@@ -60,5 +74,5 @@ export function designChannels(
     warnings.push(`Main이 ${mains.length}개로 WING의 Main 4개를 초과합니다.`);
   }
 
-  return { channels, totalChannels, buses: busResult, mains, warnings };
+  return { channels, flatChannels, totalChannels, buses: busResult, mains, warnings };
 }

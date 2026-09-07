@@ -7,6 +7,7 @@ import {
   type BusRow,
   type CategoryRow,
 } from "@/lib/channelDesigner";
+import ConsoleFaderView from "@/components/ConsoleFaderView";
 
 let idCounter = 0;
 function nextId() {
@@ -271,6 +272,17 @@ export default function DesignerPage() {
           ))}
         </div>
       )}
+
+      <section className="mt-8">
+        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-3">
+          콘솔 페이더 뷰
+        </h2>
+        <ConsoleFaderView
+          channels={result.flatChannels}
+          buses={result.buses}
+          mains={result.mains}
+        />
+      </section>
     </div>
   );
 }
