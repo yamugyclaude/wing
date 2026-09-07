@@ -11,7 +11,7 @@ type Strip = {
 
 function FaderStrip({ strip }: { strip: Strip }) {
   return (
-    <div className="flex flex-col items-center gap-1 w-16 shrink-0">
+    <div className="w-16 shrink-0">
       <div
         className={`w-full h-14 rounded-sm px-1 py-1 text-center flex flex-col justify-center ${
           strip.filled
@@ -21,14 +21,6 @@ function FaderStrip({ strip }: { strip: Strip }) {
       >
         <span className="text-[10px] font-mono leading-tight">{strip.topLabel}</span>
         <span className="text-[9px] leading-tight break-words">{strip.bottomLabel}</span>
-      </div>
-      <div className="w-1.5 h-24 rounded-full bg-neutral-200 dark:bg-neutral-800 relative">
-        <div
-          className={`absolute left-1/2 -translate-x-1/2 w-5 h-3 rounded-sm ${
-            strip.filled ? "bg-neutral-600 dark:bg-neutral-300" : "bg-neutral-300 dark:bg-neutral-700"
-          }`}
-          style={{ top: "40%" }}
-        />
       </div>
     </div>
   );
