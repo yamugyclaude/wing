@@ -129,4 +129,27 @@ Bus나 Matrix도 마찬가지로 OUTPUTS 화면에서 연결해야 실제 출력
 
 이 항목은 공식 매뉴얼이 아니라 App Store/제조사 웹 자료를 근거로 확인한 내용입니다.`,
   },
+  {
+    slug: "main-matrix-master-dca",
+    question: "Main2/3/4 + Matrix 전체를 페이더 하나로 묶어서 마스터로 쓰려면?",
+    summary: "Main끼리는 계층 구조가 없음 — DCA 그룹으로 여러 Main/Matrix를 하나의 페이더에 묶는 방법",
+    confirmed: true,
+    source: "User Manual Section 4.2 (Layer/Bank buttons), Section 5.1 (Tags/DCA)",
+    answer: `WING은 Main이 서로를 감싸는 계층 구조가 없습니다 — Main1이 Main2/3/4를 포함하는 "전체 마스터"가 될 수는 없습니다. 대신 **DCA 그룹**으로 같은 효과를 낼 수 있습니다. DCA는 여러 버스/채널을 하나의 페이더로 묶어서, 서로의 상대 밸런스는 유지한 채 전체 레벨만 같이 움직이게 해줍니다.
+
+**설정 절차:**
+1. DCA 그룹 하나를 마스터용으로 정한다 (예: D1). WING엔 D1-D16, 16개의 DCA 그룹이 있다.
+2. Main 2, Main 3, Main 4, Matrix 1~4 — 각각의 HOME 화면을 열고 Tags 탭에서 DCA D1에 배정한다. (총 7개 항목을 D1에 묶음)
+3. 센터 또는 오른쪽 페이더 뱅크에서 DCA 뱅크 버튼을 누르면 D1-D16 페이더가 나타난다.
+4. D1 페이더 하나를 움직이면 Main2/3/4 + Matrix1-4 전체 레벨이 상대 밸런스 그대로 같이 오르내린다.
+
+**Main 1의 역할**: 이 구조에서 Main 1은 신호가 지나가는 별도 버스로 남아있고, 그 자체가 DCA는 아니다. Main 1 페이더로 마스터를 조작하는 느낌을 내고 싶다면, Main 1도 함께 D1에 배정하면 된다 — 다만 Main 1 고유의 신호는 여전히 별도로 존재한다.
+
+**정리:**
+- Main 1: 필요하면 별도 버스로 두거나, DCA D1에 함께 배정
+- Main 2 → Matrix 1, 2로 Feed
+- Main 3 → Matrix 3, 4로 Feed
+- Main 4: 모니터 스피커 아웃으로 직결
+- DCA D1: Main2/3/4 + Matrix1-4 전체를 아우르는 마스터 페이더`,
+  },
 ];
