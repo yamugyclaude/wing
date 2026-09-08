@@ -36,11 +36,19 @@ function moveItem<T>(arr: T[], index: number, dir: -1 | 1): T[] {
 const inputCls =
   "rounded border border-neutral-300 dark:border-neutral-700 bg-transparent px-1.5 py-1 text-xs";
 
+const TABS = [
+  { key: "channels", label: "채널 항목" },
+  { key: "buses", label: "버스/Main" },
+  { key: "results", label: "결과" },
+] as const;
+type TabKey = (typeof TABS)[number]["key"];
+
 export default function DesignerPage() {
   const [categories, setCategories] = useState<CategoryRow[]>(DEFAULT_CATEGORIES);
   const [buses, setBuses] = useState<BusRow[]>(DEFAULT_BUSES);
   const [mains, setMains] = useState<string[]>(["Main 1 (PA)"]);
   const [labelOverrides, setLabelOverrides] = useState<Record<number, string>>({});
+  const [mobileTab, setMobileTab] = useState<TabKey>("channels");
 
   const result = useMemo(() => designChannels(categories, buses, mains), [categories, buses, mains]);
 
@@ -59,7 +67,7 @@ export default function DesignerPage() {
 
   return (
     <div className="max-w-6xl mx-auto w-full px-4 py-6">
-      <div className="flex items-baseline justify-between">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
         <Link href="/" className="text-xs text-neutral-500 underline underline-offset-4">
           ← Q&A로
         </Link>
@@ -69,9 +77,31 @@ export default function DesignerPage() {
         </span>
       </div>
 
+      {/* Mobile tab switcher — only one section shown at a time below lg */}
+      <div className="mt-3 flex gap-1 lg:hidden">
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => setMobileTab(t.key)}
+            className={`flex-1 text-xs rounded-md px-2 py-1.5 border ${
+              mobileTab === t.key
+                ? "border-neutral-800 dark:border-neutral-200 font-medium"
+                : "border-neutral-200 dark:border-neutral-800 text-neutral-500"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Channel categories */}
-        <section className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-3">
+        <section
+          className={`border border-neutral-200 dark:border-neutral-800 rounded-lg p-3 ${
+            mobileTab === "channels" ? "" : "hidden"
+          } lg:block`}
+        >
           <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">
             채널 항목
           </h2>
@@ -145,7 +175,11 @@ export default function DesignerPage() {
         </section>
 
         {/* Buses */}
-        <section className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-3">
+        <section
+          className={`border border-neutral-200 dark:border-neutral-800 rounded-lg p-3 ${
+            mobileTab === "buses" ? "" : "hidden"
+          } lg:block`}
+        >
           <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">
             버스 항목 (Bus 1, 2...)
           </h2>
@@ -237,7 +271,11 @@ export default function DesignerPage() {
         </section>
 
         {/* Results: channel table */}
-        <section className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-3 max-h-[420px] overflow-y-auto">
+        <section
+          className={`border border-neutral-200 dark:border-neutral-800 rounded-lg p-3 max-h-[420px] overflow-y-auto ${
+            mobileTab === "results" ? "" : "hidden"
+          } lg:block`}
+        >
           <h2 className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">
             채널 배정 (이름 직접 수정 가능)
           </h2>
