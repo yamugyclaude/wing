@@ -152,4 +152,51 @@ Bus나 Matrix도 마찬가지로 OUTPUTS 화면에서 연결해야 실제 출력
 - Main 4: 모니터 스피커 아웃으로 직결
 - DCA D1: Main2/3/4 + Matrix1-4 전체를 아우르는 마스터 페이더`,
   },
+  {
+    slug: "main-home-input-grid",
+    question: "Main의 HOME → INPUT 화면(Channel/Aux/Bus 그리드)은 뭘 보여주는 화면인가요?",
+    summary: "Main으로 들어오는 Channel/Aux/Bus 전체를 켜고 끄는 그리드 — Bus는 용도에 따라 켤지 결정",
+    confirmed: true,
+    source: "User Manual Section 5.1 HOME",
+    answer: `Main(예: M1 "Main L")을 SELECT한 상태에서 보이는 HOME 화면의 INPUT 탭입니다.
+
+**중앙 그리드 구성**
+- CHANNEL 1-40: 40개 입력 채널이 이 Main으로 들어오는지 여부 (초록=ON)
+- AUX 1-8: Aux 채널도 동일
+- BUS 1-16: 16개 Bus가 이 Main으로 들어오는지 여부
+
+초록/회색으로 채널별 on/off 상태가 한눈에 보이고, **그리드를 터치하면 더 상세한 Feed Configuration 화면**(Send Mode, Panning, Level 등을 일괄 설정하는 화면)으로 들어갑니다.
+
+**Bus 줄을 어떻게 다뤄야 하는가**
+- Input 채널과 Aux는 보통 전부 ON — Main이 최종 믹스를 만드는 자리라서 원본 소스가 다 들어가야 함.
+- Bus는 **용도에 따라 다름**:
+  - 모니터용 Bus → OFF로 둬야 함. 관객과 무관한 별도 밸런스라서 Main에 섞으면 중복/밸런스 왜곡.
+  - 리버브/딜레이 같은 FX Bus → ON이 맞음. 이펙트는 관객도 들어야 하는 소리라서 의도적으로 Main에 포함.
+
+**기타 요소**
+- TRIM: 이 Main 전체의 입력 트림
+- TAGS 탭: DCA/Mute Group 배정 (여러 Main/Matrix를 하나의 마스터 페이더로 묶을 때 여기서 설정)
+- EQUALIZER: 이 Main 자체에 걸리는 EQ
+- 오른쪽 MAIN 패널: SOLO BUS를 헤드폰/스피커 중 어디로 들을지 설정`,
+  },
+  {
+    slug: "pan-width-values",
+    question: "패닝에서 150%, 100%, 40, -100 같은 숫자들은 각각 무슨 차이인가요?",
+    summary: "WIDTH(-150%~150%)와 PAN(-100~100)은 서로 다른 파라미터 — 각각의 의미 정리",
+    confirmed: true,
+    source: "User Manual Section 6.1 INPUT Channels — Main Sends",
+    answer: `질문하신 숫자들은 사실 두 개의 다른 파라미터에 걸쳐 있습니다 — WIDTH와 PAN.
+
+**WIDTH (스테레오 폭, 범위 -150% ~ 150%)**
+- 100%: 정상 스테레오 폭 — Source의 원래 L/R 그대로.
+- 150%: 원래보다 폭을 더 넓게 과장 — 좌우가 더 벌어진 느낌.
+- 음수 값(예: -100%): 좌우 채널을 반전(invert)시킴 — 왼쪽에 있던 소리가 오른쪽으로, 오른쪽이 왼쪽으로 뒤바뀜. 숫자 크기는 반전된 상태에서의 폭.
+
+**PAN (좌우 위치, 범위 -100 ~ 100)**
+- 0: 센터
+- 40: 센터에서 오른쪽으로 40만큼 치우침 (완전 오른쪽은 아님)
+- -100: 완전히 왼쪽 끝
+
+**정리**: 150%와 100%는 WIDTH 값, 40과 -100은 PAN 값입니다. 두 컨트롤은 채널 HOME 화면의 MAIN SENDS 탭 중앙 원형 그래픽(WIDTH/PAN)에서 함께 조정합니다.`,
+  },
 ];
