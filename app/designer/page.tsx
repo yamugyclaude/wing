@@ -39,8 +39,22 @@ export default function DesignerPage() {
   const [categories, setCategories] = useState<CategoryRow[]>(DEFAULT_CATEGORIES);
   const [buses, setBuses] = useState<BusRow[]>(DEFAULT_BUSES);
   const [mains, setMains] = useState<string[]>(["Main 1 (PA)"]);
+  const [labelOverrides, setLabelOverrides] = useState<Record<number, string>>({});
 
   const result = useMemo(() => designChannels(categories, buses, mains), [categories, buses, mains]);
+
+  const finalChannels = useMemo(
+    () =>
+      result.flatChannels.map((c) => ({
+        ...c,
+        label: labelOverrides[c.number] ?? c.label,
+      })),
+    [result.flatChannels, labelOverrides]
+  );
+
+  const setChannelLabel = (number: number, label: string) => {
+    setLabelOverrides((prev) => ({ ...prev, [number]: label }));
+  };
 
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-10">
@@ -223,23 +237,30 @@ export default function DesignerPage() {
       {/* Results */}
       <section className="mt-10">
         <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-3">
-          결과: 채널 배정
+          결과: 채널 배정 (채널마다 이름 직접 수정 가능)
         </h2>
-        {result.channels.length === 0 ? (
+        {finalChannels.length === 0 ? (
           <p className="text-sm text-neutral-500">위에 채널 항목과 개수를 입력하세요.</p>
         ) : (
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="text-left text-xs text-neutral-500 border-b border-neutral-200 dark:border-neutral-800">
-                <th className="py-2 pr-3">항목</th>
-                <th className="py-2">채널 번호</th>
+                <th className="py-2 pr-3 w-20">채널</th>
+                <th className="py-2">이름</th>
               </tr>
             </thead>
             <tbody>
-              {result.channels.map((c, i) => (
-                <tr key={i} className="border-b border-neutral-100 dark:border-neutral-900">
-                  <td className="py-2 pr-3 font-medium">{c.label}</td>
-                  <td className="py-2">{c.from === c.to ? `CH${c.from}` : `CH${c.from}-${c.to}`}</td>
+              {finalChannels.map((c) => (
+                <tr key={c.number} className="border-b border-neutral-100 dark:border-neutral-900">
+                  <td className="py-2 pr-3 font-mono text-xs">CH{c.number}</td>
+                  <td className="py-1.5">
+                    <input
+                      type="text"
+                      value={c.label}
+                      onChange={(e) => setChannelLabel(c.number, e.target.value)}
+                      className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent px-2 py-1 text-sm"
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -278,11 +299,7 @@ export default function DesignerPage() {
         <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-3">
           콘솔 페이더 뷰
         </h2>
-        <ConsoleFaderView
-          channels={result.flatChannels}
-          buses={result.buses}
-          mains={result.mains}
-        />
+        <ConsoleFaderView channels={finalChannels} buses={result.buses} mains={result.mains} />
       </section>
     </div>
   );
