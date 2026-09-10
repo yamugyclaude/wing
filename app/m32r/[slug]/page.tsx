@@ -33,6 +33,16 @@ export default async function M32rQnaPage({
 
       <h1 className="mt-2 text-2xl font-semibold">{item.question}</h1>
 
+      {item.slug === "festival-cue-sheet-channel-plan" && (
+        <a
+          href="/m32r/festival-cuesheet.csv"
+          download
+          className="mt-3 inline-block text-sm underline underline-offset-4"
+        >
+          큐시트 CSV 다운로드 (엑셀/구글시트로 열기, 프린트용)
+        </a>
+      )}
+
       <div className="mt-6 leading-relaxed">{formatAnswer(item.answer)}</div>
     </div>
   );
