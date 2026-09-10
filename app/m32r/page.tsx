@@ -1,47 +1,38 @@
 import Link from "next/link";
-import { qnaList } from "@/lib/qna";
+import { m32rQnaList } from "@/lib/m32rQna";
 
-export default function Home() {
+export default function M32rHome() {
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-10">
       <header className="mb-8">
-        <h1 className="text-2xl font-semibold">WING Q&A</h1>
+        <h1 className="text-2xl font-semibold">M32R LIVE Q&A</h1>
         <p className="mt-1 text-sm text-neutral-500">
-          베링거 WING 학습 기록 — 막히는 부분을 질문하고, 개념이 확정되면 여기 쌓입니다.
+          Midas M32R LIVE 학습 기록 — WING과는 별도로 독립 운용합니다.
         </p>
         <div className="mt-4 flex flex-col gap-1">
           <a
-            href="/manual/WING-User-Manual_2025-10-20.pdf"
+            href="/manual-m32r/M32R-User-Manual.pdf"
             className="text-sm underline underline-offset-4"
           >
-            공식 매뉴얼 원문 열람/다운로드 (PDF, 2025-10-20)
+            공식 User Manual 열람/다운로드 (PDF)
           </a>
-          <Link href="/scenario" className="text-sm underline underline-offset-4">
-            실전 시나리오 (물리 버튼 포함 라우팅 절차) →
-          </Link>
-          <Link href="/template" className="text-sm underline underline-offset-4">
-            입력 장비 템플릿 (새 시나리오 준비용) →
-          </Link>
-          <Link href="/designer" className="text-sm underline underline-offset-4">
-            채널/버스 자동 설계기 →
+          <a
+            href="/manual-m32r/M32R-Live-QuickStart.pdf"
+            className="text-sm underline underline-offset-4"
+          >
+            공식 Quick Start Guide 열람/다운로드 (PDF)
+          </a>
+          <Link href="/" className="text-sm underline underline-offset-4 text-neutral-500">
+            ← WING Q&A로 이동 (다른 콘솔, 별도 공간)
           </Link>
         </div>
       </header>
 
-      <div className="mb-6 rounded-lg border border-neutral-200 dark:border-neutral-800 p-3">
-        <p className="text-xs text-neutral-500">
-          다른 콘솔(Midas M32R LIVE)을 쓰신다면 — 여기와 완전히 별도로 운용됩니다.
-        </p>
-        <Link href="/m32r" className="text-sm underline underline-offset-4">
-          M32R LIVE Q&A로 이동 →
-        </Link>
-      </div>
-
       <ul className="flex flex-col gap-3">
-        {qnaList.map((item) => (
+        {m32rQnaList.map((item) => (
           <li key={item.slug}>
             <Link
-              href={`/qna/${item.slug}`}
+              href={`/m32r/${item.slug}`}
               className="block rounded-lg border border-neutral-200 dark:border-neutral-800 p-4 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors"
             >
               <div className="flex items-start gap-2">
